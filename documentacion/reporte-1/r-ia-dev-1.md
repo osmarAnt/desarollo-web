@@ -1,13 +1,13 @@
 # Reporte de IA Desarrollo en el Proyecto
 
-**Fecha:**  
-**Número de reporte:**  
+**Fecha:**  09/11/26
+**Número de reporte:** 1  
 
 ---
 
 # 1. Breve descripción de uso
 
-Describir la intención general del desarrollo.
+Se uso para el recordatorio de como se estructura correctamente un archivo JSON
 
 ---
 
@@ -15,16 +15,17 @@ Describir la intención general del desarrollo.
 
 | Evidencia | Formato | 
 |------------|------------------------|
-Herramienta | Nombre IA Generativa
-Modelo/temperatura | GPT-4o / 0.2 (si aplica)
-Prompt original | Texto
-Respuesta de IA | Texto
-Código anterior | Commit (48d2b5d)
-Código posterior | Commit (0897eef)
-Diferencias entre versiones | git diff --numstat 48d2b5d 0897eez (copiar la salida)
-Prueba de funcionamiento | CURL o captura imagen del resultado
-Código de uso | Generación / Modificación / Depuración / Explicación / Diseño / Revisión / Documentación / Pruebas
-Reflexión del estudiante | Texto breve que describe lo obtenido u ocurrido y lo aprendido por parte del estudiante
+Herramienta | Gemini
+Modelo/temperatura | --- (si aplica)
+Prompt original | [promp](promp.md)
+Respuesta de IA | [Respuesta](Respuesta IA.md)
+
+Código anterior | Commit (d359515)
+Código posterior | Commit (70e9d84)
+Diferencias entre versiones | 20	0	database/db.json
+Prueba de funcionamiento | ![[db.png]]
+Código de uso | Generación / Modificación / Explicación 
+Reflexión del estudiante | Lo que me dio la IA fue la estructura muy basica porque no recordaba del todo la estructura de JSON asi que luego de un poco de contexto la IA genero 
 
 
 > El prompt y la respuesta pueden ser copiados como una subsección y enlazados
@@ -33,4 +34,4 @@ Reflexión del estudiante | Texto breve que describe lo obtenido u ocurrido y lo
 
 ## Observaciones adicionales
 
-Agregar cualquier comentario explicativo relevante.
+ninguna

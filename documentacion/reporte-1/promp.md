@@ -1,0 +1,1 @@
+como se estructuraba un archivo json
