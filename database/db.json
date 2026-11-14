@@ -1,20 +1,23 @@
 {
-  "usuarios": [
-    {
-      "id_usuario": "1",
-      "nombre": "Osmar",
-      "email": "correo@ejemplo.com",
-      "password_hash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"
-    }
-  ],
-  "tareas": [
-    {
-      "id_tarea": "1",
-      "id_usuario": "1",
-      "materia": "Desarrollo Web",
-      "titulo": "prueba",
-      "fecha_limite": "2026-11-10T23:59:00",
-      "estado": "pendiente"
-    }
-  ]
+  "tareas" : [ {
+    "id_tarea" : "1",
+    "id_usuario" : "1",
+    "materia" : "Desarrollo Web",
+    "titulo" : "prueba",
+    "fecha_limite" : "2026-11-10T23:59:00",
+    "estado" : "pendiente"
+  }, {
+    "id_tarea" : null,
+    "id_usuario" : null,
+    "materia" : "prueba",
+    "titulo" : "prueba",
+    "fecha_limite" : null,
+    "estado" : "prueba"
+  } ],
+  "usuarios" : [ {
+    "idUsuario" : null,
+    "nombre" : "Osmar",
+    "email" : "correo@ejemplo.com",
+    "passwordHash" : null
+  } ]
 }
