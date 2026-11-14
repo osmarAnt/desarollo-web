@@ -1,0 +1,1 @@
+como hago para que las solicitudes de curl "sobrepasen" el login de security
