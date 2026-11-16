@@ -7,17 +7,22 @@
     "fecha_limite" : "2026-11-10T23:59:00",
     "estado" : "pendiente"
   }, {
-    "id_tarea" : null,
-    "id_usuario" : null,
-    "materia" : "prueba",
-    "titulo" : "prueba",
-    "fecha_limite" : null,
-    "estado" : "prueba"
+    "id_tarea" : "fd39511c-2b70-4494-a3d1-97220e106871",
+    "id_usuario" : "user_123",
+    "materia" : "Desarrollo Web",
+    "titulo" : "Probar PUT y DELETE",
+    "fecha_limite" : "2026-11-20T23:59:00",
+    "estado" : "completada"
   } ],
   "usuarios" : [ {
     "idUsuario" : null,
     "nombre" : "Osmar",
     "email" : "correo@ejemplo.com",
     "passwordHash" : null
+  }, {
+    "idUsuario" : "1636df77-2d29-490f-accf-5949a063fdfe",
+    "nombre" : "Osmar",
+    "email" : "osmar@uv.mx",
+    "passwordHash" : "1234"
   } ]
 }
