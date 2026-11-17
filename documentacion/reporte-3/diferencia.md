@@ -1,0 +1,10 @@
+60	16	backend/src/main/java/mx/uv/desarrolloweb/AuthController.java
+15	0	backend/src/main/java/mx/uv/desarrolloweb/ConfigWeb.java
+27	0	backend/src/main/java/mx/uv/desarrolloweb/CustomUserDetailsService.java
+49	2	backend/src/main/java/mx/uv/desarrolloweb/SecurityConfig.java
+7	4	backend/src/main/java/mx/uv/desarrolloweb/TareaController.java
+12	0	backend/src/main/java/mx/uv/desarrolloweb/VistaController.java
+11	18	database/db.json
+244	0	frontend/css/styles.css
+103	0	frontend/index.html
+349	0	frontend/js/app.js
