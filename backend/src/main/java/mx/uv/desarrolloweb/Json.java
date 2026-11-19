@@ -59,6 +59,15 @@ public class Json {
         return tareas;
     }
 
+    public Optional<Tarea> buscarTareaPorId(String idTarea) {
+        Database db = leerDB();
+        if (db.getTareas() == null || idTarea == null) return Optional.empty();
+
+        return db.getTareas().stream()
+                .filter(t -> idTarea.equals(t.getId_tarea()))
+                .findFirst();
+    }
+
     public synchronized Tarea guardarTarea(Tarea nuevaTarea) {
         Database db = leerDB();
         if (db.getTareas() == null) {

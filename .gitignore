@@ -1,2 +1,4 @@
 ### obsidian ###
-documentacion/.obsidian
+.obsidian
+### vcode ###
+.vscode/*

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Tareas Académicas</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-    <!-- VISTA 1: AUTENTICACIÓN (LOGIN / REGISTRO) -->
+    <!-- VISTA 1: AUTENTICACIÓN -->
     <main id="auth-section" class="container auth-container">
         <div class="card">
             <h1>Gestor de Tareas</h1>
@@ -19,10 +19,8 @@
                 <button id="tab-register" class="tab" type="button">Registrarse</button>
             </div>
 
-            <!-- Banner de avisos y errores -->
             <div id="auth-alert" class="alert hidden" role="alert"></div>
 
-            <!-- Formulario Login -->
             <form id="login-form" novalidate>
                 <div class="form-group">
                     <label for="login-email">Correo institucional</label>
@@ -35,7 +33,6 @@
                 <button type="submit" class="btn btn-primary btn-block">Entrar</button>
             </form>
 
-            <!-- Formulario Registro -->
             <form id="register-form" class="hidden" novalidate>
                 <div class="form-group">
                     <label for="reg-nombre">Nombre</label>
@@ -64,7 +61,28 @@
             </div>
         </header>
 
+        <!-- Barra de resumen / métricas -->
+        <section class="container stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total</span>
+                <strong id="stat-total" class="stat-value">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Pendientes</span>
+                <strong id="stat-pendientes" class="stat-value text-warning">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Vencidas</span>
+                <strong id="stat-vencidas" class="stat-value text-danger">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Completadas</span>
+                <strong id="stat-completadas" class="stat-value text-success">0</strong>
+            </div>
+        </section>
+
         <main class="container dashboard-grid">
+            <!-- Formulario Crear Tarea -->
             <section class="card">
                 <h2>Nueva Tarea</h2>
                 <form id="tarea-form">
@@ -74,7 +92,7 @@
                     </div>
                     <div class="form-group">
                         <label for="titulo">Título de la actividad</label>
-                        <input type="text" id="titulo" placeholder="Ej. Entregable 3 Frontend" required>
+                        <input type="text" id="titulo" placeholder="Ej. Entregable 4" required>
                     </div>
                     <div class="form-group">
                         <label for="fecha_limite">Fecha límite</label>
@@ -84,20 +102,57 @@
                 </form>
             </section>
 
+            <!-- Lista y Filtros -->
             <section class="card">
                 <div class="list-header">
                     <h2>Mis Tareas</h2>
-                    <select id="filtro-estado">
-                        <option value="todas">Todas</option>
-                        <option value="pendiente">Pendientes</option>
-                        <option value="completada">Completadas</option>
-                    </select>
+                    <div class="filters-bar">
+                        <input type="text" id="busqueda" placeholder="Buscar título...">
+                        <select id="filtro-materia">
+                            <option value="todas">Todas las materias</option>
+                        </select>
+                        <select id="filtro-estado">
+                            <option value="todas">Todos los estados</option>
+                            <option value="pendiente">Pendientes</option>
+                            <option value="vencida">Vencidas</option>
+                            <option value="completada">Completadas</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="lista-tareas" class="tareas-list"></div>
             </section>
         </main>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- MODAL PARA EDITAR TAREA -->
+    <div id="edit-modal" class="modal-backdrop hidden">
+        <div class="card modal-card">
+            <h2>Editar Tarea</h2>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-materia">Materia</label>
+                    <input type="text" id="edit-materia" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-titulo">Título de la actividad</label>
+                    <input type="text" id="edit-titulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-fecha_limite">Fecha límite</label>
+                    <input type="datetime-local" id="edit-fecha_limite" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="btn-cancel-edit" class="btn btn-outline">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/js/app.js"></script>
 </body>
 </html>
