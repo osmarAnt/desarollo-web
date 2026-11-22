@@ -192,7 +192,7 @@ registerForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, email, password_hash: password }),
+      body: JSON.stringify({ nombre, email, passwordHash: password }),
     });
     const data = await res.json();
 
@@ -357,7 +357,7 @@ function renderizarTareas() {
   const est = filtroEstado.value;
   const activas = obtenerTareasActivas();
 
-  const filtradas = tareasCache
+  const filtradas = activas
     .filter((t) => {
       const vencida = estaVencida(t);
       const coincideTexto =
