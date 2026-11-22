@@ -135,4 +135,23 @@ public class Json {
         return nuevoUsuario;
     }
 
+    public synchronized boolean responderInvitacion(String idTarea, boolean aceptar) {
+        Database db = leerDB();
+        if (db.getTareas() == null || idTarea == null) return false;
+
+        if (!aceptar) {
+            boolean eliminada = db.getTareas().removeIf(t -> idTarea.equals(t.getId_tarea()));
+            if (eliminada) guardarDB(db);
+            return eliminada;
+        }
+
+        for (Tarea t : db.getTareas()) {
+            if (idTarea.equals(t.getId_tarea())) {
+                t.setEstado_invitacion("aceptada");
+                guardarDB(db);
+                return true;
+            }
+        }
+        return false;
+    }
 }

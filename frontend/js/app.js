@@ -83,6 +83,10 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;");
 }
 
+function obtenerTareasActivas() {
+    return tareasCache.filter(t => t.estado_invitacion !== "pendiente_aceptacion");
+}
+
 // --- AUTENTICACIÓN ---
 
 loginEmailInput.addEventListener("blur", () =>
@@ -248,6 +252,7 @@ async function cargarTareas() {
       return;
     }
     tareasCache = await res.json();
+    renderizarInvitaciones()
     actualizarEstadisticas();
     actualizarSelectorMaterias();
     renderizarTareas();
@@ -256,48 +261,101 @@ async function cargarTareas() {
   }
 }
 
-function actualizarEstadisticas() {
-  const total = tareasCache.length;
-  const completadas = tareasCache.filter(
-    (t) => t.estado === "completada",
-  ).length;
-  const vencidas = tareasCache.filter((t) => estaVencida(t)).length;
-  const pendientes = total - completadas;
+function renderizarInvitaciones() {
+    const seccion = document.getElementById("invitaciones-section");
+    const contenedor = document.getElementById("lista-invitaciones");
+    const contador = document.getElementById("invitaciones-count");
 
-  document.getElementById("stat-total").textContent = total;
-  document.getElementById("stat-pendientes").textContent = pendientes;
-  document.getElementById("stat-vencidas").textContent = vencidas;
-  document.getElementById("stat-completadas").textContent = completadas;
+    const pendientes = tareasCache.filter(t => t.estado_invitacion === "pendiente_aceptacion");
+    contador.textContent = pendientes.length;
+
+    if (pendientes.length === 0) {
+        seccion.classList.add("hidden");
+        contenedor.innerHTML = "";
+        return;
+    }
+
+    seccion.classList.remove("hidden");
+    contenedor.innerHTML = pendientes.map(t => {
+        const fechaFormateada = t.fecha_limite ? t.fecha_limite.replace("T", " ") : "Sin fecha";
+        return `
+            <div class="tarea-item">
+                <div class="tarea-info">
+                    <span class="tarea-materia">${escapeHtml(t.materia)}</span>
+                    <span class="badge badge-remitente">De: ${escapeHtml(t.nombre_remitente || "Compañero")}</span>
+                    <h3>${escapeHtml(t.titulo)}</h3>
+                    <span class="tarea-fecha">Entrega propuesta: ${escapeHtml(fechaFormateada)}</span>
+                </div>
+                <div class="tarea-actions">
+                    <button class="btn btn-success" onclick="responderInvitacion('${t.id_tarea}', 'aceptar')">
+                        Aceptar
+                    </button>
+                    <button class="btn btn-danger" onclick="responderInvitacion('${t.id_tarea}', 'rechazar')">
+                        Rechazar
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+async function responderInvitacion(id, accion) {
+    try {
+        const res = await fetch(`${API_URL}/tareas/${id}/responder`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ accion })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            mostrarToast(data.mensaje);
+            cargarTareas();
+        } else {
+            mostrarToast(data.error || "No se pudo procesar la solicitud");
+        }
+    } catch (err) {
+        mostrarToast("Error de conexión");
+    }
+}
+
+function actualizarEstadisticas() {
+    const activas = obtenerTareasActivas();
+    const total = activas.length;
+    const completadas = activas.filter(t => t.estado === "completada").length;
+    const vencidas = activas.filter(t => estaVencida(t)).length;
+    const pendientes = total - completadas;
+
+    document.getElementById("stat-total").textContent = total;
+    document.getElementById("stat-pendientes").textContent = pendientes;
+    document.getElementById("stat-vencidas").textContent = vencidas;
+    document.getElementById("stat-completadas").textContent = completadas;
 }
 
 function actualizarSelectorMaterias() {
-  const seleccionActual = filtroMateria.value;
-  const materiasUnicas = [
-    ...new Set(tareasCache.map((t) => t.materia).filter(Boolean)),
-  ].sort();
+    const seleccionActual = filtroMateria.value;
+    const activas = obtenerTareasActivas();
+    const materiasUnicas = [...new Set(activas.map(t => t.materia).filter(Boolean))].sort();
 
-  filtroMateria.innerHTML =
-    `<option value="todas">Todas las materias</option>` +
-    materiasUnicas
-      .map((m) => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`)
-      .join("");
+    filtroMateria.innerHTML = `<option value="todas">Todas las materias</option>` +
+        materiasUnicas.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
 
-  if (materiasUnicas.includes(seleccionActual)) {
-    filtroMateria.value = seleccionActual;
-  }
+    if (materiasUnicas.includes(seleccionActual)) {
+        filtroMateria.value = seleccionActual;
+    }
 
-  const datalistMaterias = document.getElementById("materias-sugeridas");
-  if (datalistMaterias) {
-    datalistMaterias.innerHTML = materiasUnicas
-      .map((m) => `<option value="${escapeHtml(m)}"></option>`)
-      .join("");
-  }
+    const datalistMaterias = document.getElementById("materias-sugeridas");
+    if (datalistMaterias) {
+        datalistMaterias.innerHTML = materiasUnicas
+            .map(m => `<option value="${escapeHtml(m)}"></option>`)
+            .join("");
+    }
 }
 
 function renderizarTareas() {
   const texto = busquedaInput.value.trim().toLowerCase();
   const mat = filtroMateria.value;
   const est = filtroEstado.value;
+  const activas = obtenerTareasActivas();
 
   const filtradas = tareasCache
     .filter((t) => {
@@ -344,6 +402,9 @@ function renderizarTareas() {
         : vencida
           ? "vencida"
           : "pendiente";
+      const badgeRemitente = t.nombre_remitente
+            ? `<span class="badge badge-remitente">De: ${escapeHtml(t.nombre_remitente)}</span>`
+            : "";
 
       return `
             <div class="tarea-item ${claseItem}">
@@ -376,35 +437,39 @@ filtroEstado.addEventListener("change", renderizarTareas);
 
 // Crear Tarea (POST)
 tareaForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const nuevaTarea = {
-    materia: document.getElementById("materia").value.trim(),
-    titulo: document.getElementById("titulo").value.trim(),
-    fecha_limite: document.getElementById("fecha_limite").value,
-    estado: "pendiente",
-  };
+    const destinatario = document.getElementById("destinatario").value.trim();
+    const materia = document.getElementById("materia").value.trim();
+    const titulo = document.getElementById("titulo").value.trim();
+    const fecha_limite = document.getElementById("fecha_limite").value;
 
-  try {
-    const res = await fetch(`${API_URL}/tareas`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevaTarea),
-    });
+    const esEnvioExterno = destinatario.length > 0;
+    const url = esEnvioExterno ? `${API_URL}/tareas/enviar` : `${API_URL}/tareas`;
+    const body = esEnvioExterno
+        ? { destinatario_email: destinatario, materia, titulo, fecha_limite }
+        : { materia, titulo, fecha_limite, estado: "pendiente" };
 
-    if (res.status === 401) return mostrarAuth();
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
 
-    if (res.ok) {
-      tareaForm.reset();
-      mostrarToast("Tarea agregada");
-      cargarTareas();
-    } else {
-      const err = await res.json();
-      mostrarToast(err.error || "Error al crear tarea");
+        if (res.status === 401) return mostrarAuth();
+
+        if (res.ok) {
+            tareaForm.reset();
+            mostrarToast(esEnvioExterno ? `Tarea enviada a ${destinatario}` : "Tarea agregada");
+            cargarTareas();
+        } else {
+            const err = await res.json();
+            mostrarToast(err.error || "Error al procesar la tarea");
+        }
+    } catch (err) {
+        mostrarToast("Error de conexión");
     }
-  } catch (err) {
-    mostrarToast("Error de conexión");
-  }
 });
 
 // Modal de Edición (PUT completo)

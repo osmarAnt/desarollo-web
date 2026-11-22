@@ -134,7 +134,7 @@
               <input
                 type="text"
                 id="titulo"
-                placeholder="Ej. Entregable 4"
+                placeholder="Ej. Actividad 1"
                 required
               />
             </div>
@@ -142,11 +142,28 @@
               <label for="fecha_limite">Fecha límite</label>
               <input type="datetime-local" id="fecha_limite" required />
             </div>
+            <div class="form-group">
+              <label for="destinatario">Enviar a otro usuario (opcional)</label>
+              <input
+                type="email"
+                id="destinatario"
+                placeholder="companero@uv.mx (vacío = para mí)"
+              />
+            </div>
             <button type="submit" class="btn btn-primary btn-block">
               Agregar Tarea
             </button>
           </form>
         </section>
+
+        <div class="right-column">
+          <!-- Bandeja de solicitudes de tareas enviadas por otros usuarios -->
+          <section id="invitaciones-section" class="card invitaciones-card hidden">
+            <h2>
+              Solicitudes de Tareas Recibidas (<span id="invitaciones-count">0</span>)
+            </h2>
+            <div id="lista-invitaciones" class="tareas-list"></div>
+          </section>
 
         <!-- Lista y Filtros -->
         <section class="card">

@@ -7,6 +7,10 @@ public class Tarea {
     private String titulo ;
     private String fecha_limite;
     private String estado;
+
+    private String id_remitente;
+    private String nombre_remitente;
+    private String estado_invitacion;
     
     public String getId_tarea() {
         return id_tarea;
@@ -45,8 +49,30 @@ public class Tarea {
         this.estado = estado;
     }
 
+
+
+    public String getId_remitente() {
+        return id_remitente;
+    }
+    public void setId_remitente(String id_remitente) {
+        this.id_remitente = id_remitente;
+    }
+    public String getNombre_remitente() {
+        return nombre_remitente;
+    }
+    public void setNombre_remitente(String nombre_remitente) {
+        this.nombre_remitente = nombre_remitente;
+    }
+    public String getEstado_invitacion() {
+        return estado_invitacion;
+    }
+    public void setEstado_invitacion(String estado_invitacion) {
+        this.estado_invitacion = estado_invitacion;
+    }
+    
     public Tarea() {
     }
+    
     public Tarea(String id_tarea, String id_usuario, String materia, String titulo, String fecha_limite,
             String estado) {
         this.id_tarea = id_tarea;

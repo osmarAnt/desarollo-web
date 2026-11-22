@@ -5,7 +5,40 @@
     "materia" : "prueba",
     "titulo" : "prueba",
     "fecha_limite" : "2026-11-17T17:32",
-    "estado" : "completada"
+    "estado" : "completada",
+    "estado_invitacion" : null,
+    "id_remitente" : null,
+    "nombre_remitente" : null
+  }, {
+    "id_tarea" : "9cf66b1d-3ecc-45c7-88e2-e05231873e43",
+    "id_usuario" : "ab13e0a3-03a7-4304-bc7d-dcf433402525",
+    "materia" : "Desarrollo web",
+    "titulo" : "proyecto final",
+    "fecha_limite" : "2027-01-22T23:45",
+    "estado" : "pendiente",
+    "estado_invitacion" : null,
+    "id_remitente" : null,
+    "nombre_remitente" : null
+  }, {
+    "id_tarea" : "9be14a82-3ad3-46a8-89a6-b12c721ad56c",
+    "id_usuario" : "ab13e0a3-03a7-4304-bc7d-dcf433402525",
+    "materia" : "otra tarea",
+    "titulo" : "actividad 1",
+    "fecha_limite" : "2026-11-21T23:54",
+    "estado" : "pendiente",
+    "estado_invitacion" : null,
+    "id_remitente" : null,
+    "nombre_remitente" : null
+  }, {
+    "id_tarea" : "86046cb2-5545-43b1-b04a-3e63875dde24",
+    "id_usuario" : "34747008-97ed-4477-846d-4ad020121e86",
+    "materia" : "ada",
+    "titulo" : "ada",
+    "fecha_limite" : "2026-11-21T22:55",
+    "estado" : "pendiente",
+    "estado_invitacion" : "aceptada",
+    "id_remitente" : "ab13e0a3-03a7-4304-bc7d-dcf433402525",
+    "nombre_remitente" : "Osmar"
   } ],
   "usuarios" : [ {
     "idUsuario" : "ab13e0a3-03a7-4304-bc7d-dcf433402525",
