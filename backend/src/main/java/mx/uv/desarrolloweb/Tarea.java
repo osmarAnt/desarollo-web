@@ -1,6 +1,11 @@
 package mx.uv.desarrolloweb;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document (collection = "tareas")
 public class Tarea {
+    @Id 
     private String id_tarea;
     private String id_usuario;
     private String materia;
@@ -69,7 +74,7 @@ public class Tarea {
     public void setEstado_invitacion(String estado_invitacion) {
         this.estado_invitacion = estado_invitacion;
     }
-    
+
     public Tarea() {
     }
     

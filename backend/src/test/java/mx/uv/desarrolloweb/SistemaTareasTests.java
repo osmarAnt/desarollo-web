@@ -14,9 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,35 +28,42 @@ class SistemaTareasTests {
     @Autowired
     private WebApplicationContext context;
 
+    @Autowired
+    private UsuarioRepository usuarioRepo;
+
+    @Autowired
+    private TareaRepository tareaRepo;
+
     private MockMvc mockMvc;
-    private Path dbPath;
-    private byte[] respaldoOriginal;
+    private List<Usuario> respaldoUsuarios;
+    private List<Tarea> respaldoTareas;
 
     @BeforeEach
-    void prepararEntorno() throws Exception {
+    void prepararEntorno() {
         Filter springSecurityFilterChain = context.getBean("springSecurityFilterChain", Filter.class);
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .addFilters(springSecurityFilterChain)
                 .build();
 
-        Path rutaRelativa = Paths.get("../database/db.json");
-        dbPath = Files.exists(rutaRelativa) ? rutaRelativa : Paths.get("database/db.json");
-
-        if (Files.exists(dbPath)) {
-            respaldoOriginal = Files.readAllBytes(dbPath);
-        } else {
-            Files.createDirectories(dbPath.getParent());
-            respaldoOriginal = null;
-        }
-        // Inicia cada prueba con una base de datos limpia y controlada
-        Files.writeString(dbPath, "{\"usuarios\":[],\"tareas\":[]}");
+        // Respalda tus datos reales de MongoDB y deja las colecciones limpias para la prueba
+        respaldoUsuarios = usuarioRepo.findAll();
+        respaldoTareas = tareaRepo.findAll();
+        usuarioRepo.deleteAll();
+        tareaRepo.deleteAll();
     }
 
     @AfterEach
-    void restaurarEntorno() throws Exception {
-        if (respaldoOriginal != null) {
-            Files.write(dbPath, respaldoOriginal);
+    void restaurarEntorno() {
+        // Limpia los datos ficticios del test y restaura tus registros originales
+        usuarioRepo.deleteAll();
+        tareaRepo.deleteAll();
+
+        if (respaldoUsuarios != null && !respaldoUsuarios.isEmpty()) {
+            usuarioRepo.saveAll(respaldoUsuarios);
+        }
+        if (respaldoTareas != null && !respaldoTareas.isEmpty()) {
+            tareaRepo.saveAll(respaldoTareas);
         }
     }
 

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private Json jsonRepo;
+    
+    @Autowired private UsuarioRepository usuarioRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = jsonRepo.buscarUsuarioPorEmail(email)
+        Usuario usuario = usuarioRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
         return User.builder()

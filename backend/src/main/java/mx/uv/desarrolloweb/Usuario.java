@@ -1,8 +1,11 @@
 package mx.uv.desarrolloweb;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document (collection = "usuarios")
 public class Usuario{
-
+    @Id 
     private String idUsuario;
     private String nombre;
     private String email;

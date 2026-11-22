@@ -25,8 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class AuthController {
 
-    @Autowired 
-    private Json json;
+    @Autowired private UsuarioRepository usuarioRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,14 +39,14 @@ public class AuthController {
     // POST /api/auth/register 
     @PostMapping("/register")
     public ResponseEntity<?> registrar(@RequestBody Usuario nuevoUsuario) {
-        if (json.buscarUsuarioPorEmail(nuevoUsuario.getEmail()).isPresent()) {
+        if (usuarioRepo.findByEmail(nuevoUsuario.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("error", "El correo ya está registrado"));
         }
 
         // Encripta la contraseña antes de guardarla en db.json
         nuevoUsuario.setPasswordHash(passwordEncoder.encode(nuevoUsuario.getPasswordHash()));
-        Usuario creado = json.guardarUsuario(nuevoUsuario);
+        Usuario creado = usuarioRepo.save(nuevoUsuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "id_usuario", creado.getIdUsuario(),
@@ -75,7 +74,7 @@ public class AuthController {
             SecurityContextHolder.setContext(context);
             securityContextRepository.saveContext(context, request, response);
 
-            Usuario u = json.buscarUsuarioPorEmail(email).orElseThrow();
+            Usuario u = usuarioRepo.findByEmail(email).orElseThrow();
             return ResponseEntity.ok(Map.of(
                     "mensaje", "Login exitoso",
                     "id_usuario", u.getIdUsuario(),
@@ -94,7 +93,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Sin sesión activa"));
         }
-        return json.buscarUsuarioPorEmail(auth.getName())
+        return usuarioRepo.findByEmail(auth.getName())
                 .<ResponseEntity<?>>map(u -> ResponseEntity.ok(Map.of(
                         "id_usuario", u.getIdUsuario(),
                         "nombre", u.getNombre(),
